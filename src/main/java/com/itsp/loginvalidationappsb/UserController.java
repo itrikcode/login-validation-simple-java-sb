@@ -29,12 +29,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody User user) {
+    public String loginUser(@RequestBody LoginRequest loginRequest) {
         // Basic validation - check if the username and password match
-        User existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser != null && verifyPassword(user.getPassword(), existingUser.getPassword())) {
+        User existingUser = userRepository.findByUsername(loginRequest.getUsername());
 
-            return "Login successful!";
+        if (existingUser != null && verifyPassword(loginRequest.getPassword(), existingUser.getPassword())) {
+            // Check if the login request contains employee data
+            if (loginRequest.getEmployee() != null) {
+                // Save the provided employee data
+                Employee employee = loginRequest.getEmployee();
+                employeeRepository.save(employee);
+                return "Login successful! Employee data registered.";
+            }
+
+            return "Login successful! No employee data provided.";
         } else {
             return "Invalid username or password.";
         }
@@ -50,5 +58,9 @@ public class UserController {
     private boolean verifyPassword(String inputPassword, String storedPassword) {
         // This is a simple example; in production, use a secure password hashing algorithm
         return inputPassword.equals(storedPassword);
+    }
+    private String generateEmployeeCode() {
+        // This is a simple example; use a proper code generation mechanism in production
+        return "EMP" + System.currentTimeMillis();
     }
 }

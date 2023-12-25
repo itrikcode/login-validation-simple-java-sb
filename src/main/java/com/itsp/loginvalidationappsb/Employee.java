@@ -13,19 +13,8 @@ public class Employee {
     private Long id;
 
     private String code;
-
-    // getters and setters
-     private  User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Long getId() {
+ // getters and setters
+       public Long getId() {
         return id;
     }
 
